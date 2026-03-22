@@ -70,8 +70,9 @@ User → React UI → FastAPI Backend → LangGraph Engine
 
 ---
 
-## Project Structure
+##  Project Structure
 
+```text
 sentinelflow-ai/
 │
 ├── backend/
@@ -102,7 +103,6 @@ sentinelflow-ai/
 │
 ├── requirements.txt
 └── README.md
-
 ---
 
 ##  Technologies & Tools
