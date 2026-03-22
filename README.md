@@ -103,6 +103,8 @@ sentinelflow-ai/
 │
 ├── requirements.txt
 └── README.md
+
+```
 ---
 
 ##  Technologies & Tools
