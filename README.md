@@ -1,23 +1,23 @@
-# 🚀 SentinelFlow AI
+# SentinelFlow AI
 
 ### Autonomous Multi-Agent Enterprise Workflow Orchestrator
 
 ---
 
-## 🧠 Overview
+##  Overview
 
 SentinelFlow AI is an **enterprise-grade multi-agent system** designed to autonomously execute complex business workflows with built-in:
 
-* 🔄 Self-healing error recovery
-* 🧾 Full auditability
-* 🧠 AI memory & learning
-* 📊 Workflow monitoring
+* Self-healing error recovery
+* Full auditability
+* AI memory & learning
+* Workflow monitoring
 
 Unlike traditional automation systems, SentinelFlow AI **does not stop on failure** — it detects issues, adapts, and continues execution intelligently.
 
 ---
 
-## 🎯 Problem Statement
+##  Problem Statement
 
 Enterprise workflows (e.g., vendor payments, onboarding, contract processing) are:
 
@@ -25,11 +25,11 @@ Enterprise workflows (e.g., vendor payments, onboarding, contract processing) ar
 * Dependent on manual intervention
 * Prone to failures and delays
 
-👉 When a single step fails, the entire workflow stops — causing SLA breaches and inefficiency.
+When a single step fails, the entire workflow stops — causing SLA breaches and inefficiency.
 
 ---
 
-## 💡 Solution
+## Solution
 
 SentinelFlow AI introduces a **multi-agent architecture** where specialized AI agents collaborate to:
 
@@ -39,23 +39,23 @@ SentinelFlow AI introduces a **multi-agent architecture** where specialized AI a
 * Detect and recover from failures
 * Learn from past executions
 
-👉 Result: **Autonomous, reliable, and self-improving workflows**
+Result: **Autonomous, reliable, and self-improving workflows**
 
 ---
 
-## 🤖 Multi-Agent Architecture
+##  Multi-Agent Architecture
 
 | Agent        | Responsibility                     |
 | ------------ | ---------------------------------- |
-| 🏗 Architect | Breaks goal into workflow steps    |
-| 🔍 Auditor   | Validates compliance & correctness |
-| ⚙ Executor   | Executes actions                   |
-| 🛡 Sentinel  | Handles failures & retries         |
-| 🧠 Historian | Stores memory & improves decisions |
+|  Architect | Breaks goal into workflow steps    |
+|  Auditor   | Validates compliance & correctness |
+|  Executor   | Executes actions                   |
+|  Sentinel  | Handles failures & retries         |
+|  Historian | Stores memory & improves decisions |
 
 ---
 
-## 🏗 System Architecture
+## System Architecture
 
 ```text
 User → React UI → FastAPI Backend → LangGraph Engine
@@ -70,37 +70,72 @@ User → React UI → FastAPI Backend → LangGraph Engine
 
 ---
 
-## 🛠️ Technologies & Tools
+## Project Structure
 
-### 🔹 Backend
+sentinelflow-ai/
+│
+├── backend/
+│   ├── agents/
+│   │   ├── architect_agent.py
+│   │   ├── auditor_agent.py
+│   │   ├── executor_agent.py
+│   │   ├── sentinel_agent.py
+│   │   └── historian_agent.py
+│   │
+│   ├── workflows/
+│   │   └── workflow_engine.py
+│   │
+│   ├── database/
+│   │   ├── db.py
+│   │   └── vector_store.py
+│   │
+│   └── main.py
+│
+├── frontend/
+│   └── app/
+│       ├── src/
+│       │   ├── App.js
+│       │   ├── WorkflowGraph.js
+│       │   └── components/
+│       │
+│       └── package.json
+│
+├── requirements.txt
+└── README.md
+
+---
+
+##  Technologies & Tools
+
+###  Backend
 
 * Python
 * FastAPI
 * LangChain + LangGraph
 
-### 🔹 Frontend
+###  Frontend
 
 * React.js
 * JavaScript
 
-### 🔹 AI & Intelligence
+###  AI & Intelligence
 
 * Ollama (Local LLM)
 * Llama3 (Open-source model)
 * ChromaDB (Vector Store)
 
-### 🔹 Database
+###  Database
 
 * SQLite (workflow history & logs)
 
-### 🔹 Development
+###  Development
 
 * Cursor AI
 * Git & GitHub
 
 ---
 
-## ⚡ Key Features
+##  Key Features
 
 * Multi-agent workflow orchestration
 * Autonomous execution (90%+ without human intervention)
@@ -112,7 +147,7 @@ User → React UI → FastAPI Backend → LangGraph Engine
 
 ---
 
-## 🖥️ System Requirements
+##  System Requirements
 
 ### Minimum
 
@@ -126,11 +161,11 @@ User → React UI → FastAPI Backend → LangGraph Engine
 
 ---
 
-# ⚙️ Setup & Installation
+#  Setup & Installation
 
 ---
 
-## 🟣 macOS
+##  macOS
 
 ### Install dependencies
 
@@ -152,7 +187,7 @@ ollama pull llama3
 
 ---
 
-## 🟦 Windows
+##  Windows
 
 Install:
 
@@ -175,11 +210,11 @@ ollama pull llama3
 
 ---
 
-# 🚀 Run the Project
+#  Run the Project
 
 ---
 
-## 🔹 Backend
+##  Backend
 
 ```bash
 cd sentinelflow-ai
@@ -209,11 +244,11 @@ pip install -r requirements.txt
 uvicorn backend.main:app --reload
 ```
 
-👉 Backend: http://127.0.0.1:8000
+Backend: http://127.0.0.1:8000
 
 ---
 
-## 🔹 Frontend
+##  Frontend
 
 ```bash
 cd frontend/app
@@ -221,11 +256,11 @@ npm install
 npm start
 ```
 
-👉 Frontend: http://localhost:3000
+Frontend: http://localhost:3000
 
 ---
 
-# 🎮 How to Use
+#  How to Use
 
 1. Open the dashboard (localhost:3000)
 2. Select a demo or enter your own workflow goal
@@ -240,7 +275,7 @@ npm start
 
 ---
 
-## 📂 API Endpoints
+##  API Endpoints
 
 | Endpoint    | Method | Description             |
 | ----------- | ------ | ----------------------- |
@@ -249,7 +284,7 @@ npm start
 
 ---
 
-## 🧠 Example Use Cases
+##  Example Use Cases
 
 * Vendor Payment Processing
 * Employee Onboarding
@@ -259,7 +294,7 @@ npm start
 
 ---
 
-## 📊 Impact Model
+##  Impact Model
 
 **Assumptions:**
 
@@ -269,13 +304,13 @@ npm start
 
 **Results:**
 
-* ⏱ Time saved: ~33 hours/day
-* 💰 Cost savings: ~₹5.5 Lakhs/month
-* ⚠ Reduced SLA breaches
+* Time saved: ~33 hours/day
+* Cost savings: ~₹5.5 Lakhs/month
+* Reduced SLA breaches
 
 ---
 
-## 🔐 Key Advantages
+##  Key Advantages
 
 * Fully local AI (data privacy safe)
 * No paid APIs required
@@ -284,7 +319,7 @@ npm start
 
 ---
 
-## 🏆 Why This Project Stands Out
+##  Why This Project Stands Out
 
 * Multi-agent collaboration
 * Autonomous decision-making
@@ -294,7 +329,7 @@ npm start
 
 ---
 
-## 👨‍💻 Author
+##  Author
 
 **Ravindra Suthar**
 
@@ -303,7 +338,7 @@ npm start
 
 ---
 
-## ⭐ Final Note
+##  Final Note
 
 SentinelFlow AI is not just automation —
 it is **Autonomous Enterprise Intelligence**.
