@@ -158,6 +158,29 @@ function App() {
         <h3>Workflow Input</h3>
 
         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+
+        <div style={{ marginTop: "12px" }}>
+  <label style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    fontSize: "14px",
+    cursor: "pointer",
+    color: "#374151"
+  }}>
+    <input
+      type="checkbox"
+      checked={simulateFailure}
+      onChange={() => setSimulateFailure(!simulateFailure)}
+      style={{
+        width: "16px",
+        height: "16px",
+        cursor: "pointer"
+      }}
+    />
+    Simulate Failure
+  </label>
+</div>
           <input
             value={goal}
             onChange={(e) => setGoal(e.target.value)}
@@ -184,6 +207,7 @@ function App() {
           >
             🚀 Run
           </button>
+          {loading && <p style={{ marginTop: "10px" }}>⏳ Running workflow...</p>}
         </div>
 
         {confidence && (
@@ -277,10 +301,21 @@ function App() {
       }}>
         <span>© Ravindra Suthar</span>
 
-        <div style={{ display: "flex", gap: "20px" }}>
-          <a href="https://github.com/Ravindra8829" target="_blank">🐙 GitHub</a>
-          <a href="https://www.linkedin.com/in/ravindra-suthar/" target="_blank">💼 LinkedIn</a>
-        </div>
+        <a
+  href="https://github.com/Ravindra8829"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  GitHub
+</a>
+
+<a
+  href="https://www.linkedin.com/in/ravindra-suthar/"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  LinkedIn
+</a>
       </div>
 
     </div>

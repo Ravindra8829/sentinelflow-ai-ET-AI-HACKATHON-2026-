@@ -1,5 +1,6 @@
-from langgraph.graph import StateGraph
 from typing import TypedDict, List
+import random
+import time
 
 from backend.agents.architect_agent import architect_plan
 from backend.agents.executor_agent import execute_step
@@ -8,231 +9,208 @@ from backend.agents.sentinel_agent import handle_failure
 from backend.agents.historian_agent import store_memory
 
 
+# =========================
+# STATE STRUCTURE
+# =========================
 class WorkflowState(TypedDict):
     goal: str
-    steps: list
+    steps: List[str]
     current_step: str
     result: list
     logs: list
     simulate_failure: bool
     confidence: float
-    workflow_type: str
 
 
+# =========================
+# ARCHITECT
+# =========================
 def architect_node(state: WorkflowState):
 
     goal = state["goal"].lower()
-    state["logs"].append(f"🧠 Architect: Understanding goal → {goal}")
+    state["logs"].append(f"🧠 Architect: Planning workflow for → {goal}")
 
-    if any(x in goal for x in ["payment", "vendor", "invoice"]):
+    if any(x in goal for x in ["payment", "vendor"]):
         steps = [
-            "Validate invoice data",
-            "Verify vendor credentials",
-            "Check tax compliance",
-            "Perform fraud detection",
-            "Validate payment limits",
-            "Cross-check vendor history",
-            "Approve transaction",
-            "Execute payment",
+            "Validate invoice",
+            "Verify vendor",
+            "Check compliance",
+            "Fraud detection",
+            "Approve payment",
+            "Execute transaction",
             "Generate receipt",
-            "Send confirmation email",
-            "Log financial record",
-            "Update accounting system",
-            "Archive transaction"
+            "Send confirmation"
         ]
-
-    elif any(x in goal for x in ["onboarding", "employee", "hr"]):
+    elif "onboarding" in goal:
         steps = [
-            "Collect employee details",
+            "Collect employee data",
             "Verify documents",
-            "Create employee account",
-            "Assign system access",
-            "Allocate equipment",
+            "Create account",
+            "Assign access",
             "Setup payroll",
-            "Enroll benefits",
-            "Create email account",
-            "Grant tool access",
-            "Send onboarding email",
-            "Schedule orientation",
-            "Assign mentor",
-            "Update HR system",
-            "Archive onboarding record"
+            "Send welcome email"
         ]
-
-    elif any(x in goal for x in ["contract", "legal"]):
-        steps = [
-            "Extract contract terms",
-            "Validate clauses",
-            "Check legal compliance",
-            "Identify risks",
-            "Cross-check regulations",
-            "Verify parties involved",
-            "Flag inconsistencies",
-            "Suggest modifications",
-            "Approve contract",
-            "Generate summary",
-            "Store legal document",
-            "Notify stakeholders",
-            "Archive contract"
-        ]
-
     else:
         steps = [
             "Analyze request",
             "Break into tasks",
             "Validate inputs",
             "Execute operations",
-            "Monitor progress",
-            "Check compliance",
-            "Handle errors",
-            "Retry failed steps",
-            "Validate output",
-            "Store results",
-            "Notify stakeholders",
-            "Generate report"
+            "Store results"
         ]
 
     state["steps"] = steps
     return state
 
 
+# =========================
+# AUDITOR
+# =========================
 def auditor_node(state: WorkflowState):
 
     if not state["steps"]:
         return state
 
     step = state["steps"].pop(0)
-    state["logs"].append(f"🔍 Auditor: Validating {step}")
+    state["logs"].append(f"🔍 Auditor: Validating → {step}")
 
     audit = audit_step(step)
 
     if audit["status"] != "approved":
-        state["logs"].append(f"❌ Auditor rejected {step}")
+        state["logs"].append(f"❌ Auditor rejected: {step}")
         raise Exception("Audit failed")
 
     state["current_step"] = step
     return state
 
 
-import random
-
-import random
-import time
-
+# =========================
+# EXECUTOR
+# =========================
 def executor_node(state: WorkflowState):
 
     step = state["current_step"]
 
-    # Simulate execution time
     execution_time = round(random.uniform(0.5, 2.5), 2)
-
-    confidence = round(random.uniform(0.75, 0.98), 2)
+    confidence = round(random.uniform(0.8, 0.98), 2)
     risk = round(1 - confidence, 2)
 
     state["logs"].append(
-        f"⚙️ Executor: {step} | Time: {execution_time}s | Confidence: {confidence} | Risk: {risk}"
+        f"⚙️ Executor: {step} | time={execution_time}s | confidence={confidence}"
     )
 
-    # 🔥 SLA Monitoring
-    if execution_time > 2.0:
-        state["logs"].append("⏱ SLA Monitor: High latency detected ⚠️")
+    # SLA Monitoring
+    if execution_time > 2:
+        state["logs"].append("⏱ SLA Warning: High latency")
 
     if risk > 0.2:
-        state["logs"].append("⚠ Risk Monitor: Potential bottleneck detected")
+        state["logs"].append("⚠ Risk Alert: Potential issue detected")
 
-    # Failure simulation
-    if state["simulate_failure"] and len(state["result"]) == 2:
+    # 🔥 SIMULATE FAILURE (random step)
+    if state["simulate_failure"] and random.randint(2, 4) == len(state["result"]):
         state["logs"].append(f"❌ Execution failed at {step}")
-        raise Exception("Execution failed")
+        raise Exception("Execution failure")
 
     state["result"].append({
         "step": step,
         "status": "completed",
         "confidence": confidence,
-        "risk": risk,
         "time": execution_time
     })
 
     return state
 
 
+# =========================
+# SENTINEL (RECOVERY)
+# =========================
 def sentinel_node(state: WorkflowState):
 
     step = state["current_step"]
 
     state["logs"].append(f"🛡 Sentinel: Failure detected at {step}")
 
-    recovery_strategy = [
-        "Retry with backup API",
-        "Switch to alternative workflow",
-        "Use cached data fallback"
+    strategies = [
+        "Retry with fallback",
+        "Switch to backup process",
+        "Use cached data"
     ]
 
-    strategy = random.choice(recovery_strategy)
+    strategy = random.choice(strategies)
 
-    state["logs"].append(f"🛡 Sentinel: Applying strategy → {strategy}")
-    state["logs"].append("🛡 Sentinel: Recovery successful")
+    state["logs"].append(f"🛡 Applying recovery → {strategy}")
+    state["logs"].append("🛡 Recovery successful")
 
     state["result"].append({
         "step": step,
         "status": "recovered",
-        "confidence": 0.85,
-        "risk": 0.15
+        "confidence": 0.85
     })
 
     return state
 
 
+# =========================
+# HISTORIAN
+# =========================
 def historian_node(state: WorkflowState):
-    state["logs"].append("📚 Historian: Storing workflow memory")
+
+    state["logs"].append("📚 Historian: Saving workflow history")
     store_memory(state["goal"], str(state["result"]))
+
     return state
 
 
-# ✅ ADD HERE 👇 (STEP 2 FUNCTION)
-def meeting_intelligence(goal: str):
+# =========================
+# TASK GENERATOR
+# =========================
+def generate_tasks(goal: str):
 
     return [
-        {"task": "Prepare project report", "owner": "Manager", "status": "pending"},
-        {"task": "Review compliance", "owner": "Auditor", "status": "pending"},
-        {"task": "Execute payment", "owner": "Finance Team", "status": "pending"},
-        {"task": "Send confirmation email", "owner": "System", "status": "pending"}
+        {"task": "Review output", "owner": "Manager"},
+        {"task": "Validate compliance", "owner": "Auditor"},
+        {"task": "Execute final step", "owner": "Executor"},
+        {"task": "Send report", "owner": "System"}
     ]
 
 
-# EXISTING FUNCTION
-def run_workflow(goal: str, simulate_failure: bool = False):
+# =========================
+# MAIN WORKFLOW
+# =========================
+def run_workflow(goal: str, simulate_failure=False):
 
-    state = {
+    state: WorkflowState = {
         "goal": goal,
         "steps": [],
         "current_step": "",
         "result": [],
         "logs": [],
         "simulate_failure": simulate_failure,
-        "confidence": 0.9
+        "confidence": round(random.uniform(0.85, 0.98), 2)
     }
 
-    # Run architect
+    # Step 1: Plan
     state = architect_node(state)
 
-    # 🔥 LOOP THROUGH ALL STEPS
+    # Step 2: Execute loop
     while state["steps"]:
-
         try:
             state = auditor_node(state)
             state = executor_node(state)
 
-        except Exception:
+        except Exception as e:
+            state["logs"].append(f"❌ Error: {str(e)}")
             state = sentinel_node(state)
 
+    # Step 3: Save history
     state = historian_node(state)
 
-    tasks = meeting_intelligence(goal)
+    # Step 4: Generate tasks
+    tasks = generate_tasks(goal)
 
     return {
-    "result": state["result"],
-    "logs": state["logs"],
-    "confidence": state["confidence"],
-    "tasks": tasks
-}
+        "result": state["result"],
+        "logs": state["logs"],
+        "confidence": state["confidence"],
+        "tasks": tasks
+    }
